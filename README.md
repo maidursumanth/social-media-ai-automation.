@@ -1,1 +1,1 @@
-# social-media-ai-automation.
+# Social-Media-AI-Automation.
