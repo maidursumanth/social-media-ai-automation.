@@ -1,0 +1,272 @@
+{
+    "name": "Get_Resume_Content",
+    "flow": [
+        {
+            "id": 1,
+            "module": "regexp:Parser",
+            "version": 1,
+            "parameters": {
+                "global": false,
+                "pattern": "/d/(?<docld>[^/]+)/",
+                "multiline": false,
+                "sensitive": true,
+                "singleline": false,
+                "continueWhenNoRes": false
+            },
+            "mapper": {
+                "text": "{{var.input.Resume_Link}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": -337,
+                    "y": 26
+                },
+                "restore": {},
+                "parameters": [
+                    {
+                        "name": "pattern",
+                        "type": "text",
+                        "label": "Pattern",
+                        "required": true
+                    },
+                    {
+                        "name": "global",
+                        "type": "boolean",
+                        "label": "Global match",
+                        "required": true
+                    },
+                    {
+                        "name": "sensitive",
+                        "type": "boolean",
+                        "label": "Case sensitive",
+                        "required": true
+                    },
+                    {
+                        "name": "multiline",
+                        "type": "boolean",
+                        "label": "Multiline",
+                        "required": true
+                    },
+                    {
+                        "name": "singleline",
+                        "type": "boolean",
+                        "label": "Singleline",
+                        "required": true
+                    },
+                    {
+                        "name": "continueWhenNoRes",
+                        "type": "boolean",
+                        "label": "Continue the execution of the route even if the module finds no matches",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Text"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "docld",
+                        "type": "text",
+                        "label": "docld"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "google-docs:getADocument",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 4188586
+            },
+            "mapper": {
+                "filter": "image",
+                "select": "map",
+                "document": "{{1.docld}}",
+                "includeTabsContent": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": -37,
+                    "y": 26
+                },
+                "restore": {
+                    "expect": {
+                        "filter": {
+                            "label": "Image"
+                        },
+                        "select": {
+                            "label": "By Mapping"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "My Google connection"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Get Content of a Document",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "map",
+                                "dropdown"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "includeTabsContent",
+                        "type": "boolean",
+                        "label": "Include Tabs Content",
+                        "required": true
+                    },
+                    {
+                        "name": "filter",
+                        "type": "select",
+                        "label": "Filter",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "image",
+                                "drawing",
+                                "chart"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "document",
+                        "type": "text",
+                        "label": "Document ID",
+                        "required": true
+                    },
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Get Content of a Document",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "map",
+                                "dropdown"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "includeTabsContent",
+                        "type": "boolean",
+                        "label": "Include Tabs Content",
+                        "required": true
+                    },
+                    {
+                        "name": "filter",
+                        "type": "select",
+                        "label": "Filter",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "image",
+                                "drawing",
+                                "chart"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "document",
+                        "type": "text",
+                        "label": "Document ID",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "scenario-service:ReturnData",
+            "version": 2,
+            "parameters": {},
+            "mapper": {
+                "Resume_Content": "{{2.body.content}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 263,
+                    "y": 26
+                },
+                "restore": {},
+                "expect": [
+                    {
+                        "name": "Resume_Content",
+                        "type": "text",
+                        "label": "",
+                        "required": true
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.make.com",
+        "notes": []
+    },
+    "io": {
+        "input_spec": [
+            {
+                "help": "",
+                "name": "Resume_Link",
+                "type": "text",
+                "label": "",
+                "default": "",
+                "required": true,
+                "multiline": false
+            }
+        ],
+        "output_spec": [
+            {
+                "help": "",
+                "name": "Resume_Content",
+                "type": "text",
+                "label": "",
+                "default": "",
+                "required": true,
+                "multiline": false
+            }
+        ]
+    }
+}
