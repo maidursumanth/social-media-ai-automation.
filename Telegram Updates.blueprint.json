@@ -1,0 +1,186 @@
+{
+    "name": "Telegram Updates",
+    "flow": [
+        {
+            "id": 1,
+            "module": "telegram:WatchUpdates",
+            "version": 1,
+            "parameters": {
+                "__IMTHOOK__": 2243906
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTHOOK__": {
+                            "data": {
+                                "editable": "false"
+                            },
+                            "label": "Resume_Checker_Webhook"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTHOOK__",
+                        "type": "hook:telegramapi",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "ai-agent:RunAnAIAgent",
+            "version": 0,
+            "parameters": {},
+            "mapper": {
+                "agent": "81151126-bdb1-4d8b-9d74-f30d2698de4f",
+                "timeout": "",
+                "messages": [
+                    "The user has started the conversation:\n\n**Chat ID**: {{1.message.chat}}\n**User Message**: {{1.message}}\n\n---\n\n## Instructions\n\nYou have received a new message from a user through the Watch Updates tool. Follow these steps:\n\n1. **Immediately respond** to the user using the appropriate tool based on their message\n2. **Analyze their input** to determine the conversation stage and required action\n3. **Engage in a user-friendly manner** with warm, professional tone\n4. **Guide them through the process** based on their needs\n\n## Action Required\n\nProcess the user's message and respond accordingly:\n\n- If it's a **greeting** (hi, hello, start, wake, I'm back): Welcome them warmly and explain what you can help with\n- If it's a **resume evaluation request** (check resume, evaluate, validate, review): Ask for Google Doc link with clear instructions\n- If it's a **Google Doc link**: Acknowledge receipt, then fetch and evaluate the resume\n- If it's **general conversation**: Engage naturally while staying focused on hiring/resume topics\n- If it's an **email address** (after evaluation): Send the report via email and confirm\n\n## Response Tools to Use\n\n- **To Send Plain Text**: For general conversation, acknowledgments, and instructions\n- **To Send Resume Report**: Only after completing full resume evaluation\n- **Get Resume Content**: When valid Google Doc link is provided\n- **Send Email**: When user provides email address after evaluation\n\n**Remember**: Always be user-friendly, respond immediately, and guide users clearly throug"
+                ],
+                "threadID": "",
+                "outputType": "",
+                "additionalSystemPrompt": ""
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                },
+                "restore": {
+                    "expect": {
+                        "agent": {
+                            "label": "Resume_Checker"
+                        },
+                        "messages": {
+                            "mode": "chose",
+                            "items": [
+                                null
+                            ]
+                        },
+                        "outputType": {
+                            "label": "Empty"
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "agent",
+                        "type": "aiagent",
+                        "label": "Agent",
+                        "required": true
+                    },
+                    {
+                        "name": "threadID",
+                        "type": "text",
+                        "label": "Thread ID",
+                        "validate": {
+                            "max": 256
+                        }
+                    },
+                    {
+                        "name": "additionalSystemPrompt",
+                        "type": "text",
+                        "label": "Additional system instructions"
+                    },
+                    {
+                        "name": "messages",
+                        "spec": {
+                            "name": "value",
+                            "type": "text",
+                            "label": "Message"
+                        },
+                        "type": "array",
+                        "label": "Messages"
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "number",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 600,
+                            "min": 120
+                        }
+                    },
+                    {
+                        "name": "outputType",
+                        "type": "select",
+                        "label": "Output schema",
+                        "validate": {
+                            "enum": [
+                                "text",
+                                "make-schema"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "scenario-service:ReturnData",
+            "version": 2,
+            "parameters": {},
+            "mapper": {
+                "Chat_id": "{{1.message.chat}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 0
+                },
+                "restore": {},
+                "expect": [
+                    {
+                        "name": "Chat_id",
+                        "type": "text",
+                        "label": "",
+                        "required": true
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.make.com",
+        "notes": []
+    },
+    "io": {
+        "input_spec": [],
+        "output_spec": [
+            {
+                "help": "",
+                "name": "Chat_id",
+                "type": "text",
+                "label": "",
+                "default": "",
+                "required": true,
+                "multiline": false
+            }
+        ]
+    }
+}
