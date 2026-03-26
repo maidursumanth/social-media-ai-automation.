@@ -2,6 +2,8 @@
 
 # AI-Powered Social Media Content Automation 🚀<br>
 
+Project Page : https://eu1.make.com/public/shared-scenario/0XwZGHwV4Ee/integration-google-sheets
+
 This project is an automated content creation and posting pipeline built using Make.com, OpenAI, Google Sheets, and multiple social media integrations.<br>
 
 It automatically:<br>
